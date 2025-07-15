@@ -69,6 +69,9 @@ int getIndex(uint2 id, uint _order, bool debug=false) {
     uint2 prevQuad;
     uint2 currQuad = uint2(2, 2);
 
+    uint nflip02 = 0;
+    uint nflip13 = 0;
+
     if (debug)
       std::cout << "Current coordinate: " << id.toString() << std::endl;
 
@@ -80,16 +83,27 @@ int getIndex(uint2 id, uint _order, bool debug=false) {
 
       prevQuad = currQuad;
       currQuad = (id >> currentOrder) & uint2(1, 1);
+
+      nflip02 <<= 1;
+      nflip13 <<= 1;
+
       if (debug) 
         std::cout << "Current: " << currQuad.toString() << std::endl;
       if (prevQuad == uint2(0, 0)) { 
-        currQuad = flip02(currQuad); 
+        nflip02 |= 1;
         if (debug)
           std::cout << "Flipped02: " << currQuad.toString() << std::endl;
       } else if (prevQuad == uint2(1, 0)) {
-        currQuad = flip13(currQuad);
+        nflip13 |= 1;
         if (debug)
           std::cout << "Flipped13: " << currQuad.toString() << std::endl;
+      }
+
+      for (int n = i; n >= 0; n--) {
+        if (nflip02 & (1 << n))
+          currQuad = flip02(currQuad);
+        if (nflip13 & (1 << n))
+          currQuad = flip13(currQuad);
       }
 
       uint base = getBaseIndex(currQuad);
