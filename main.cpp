@@ -96,8 +96,6 @@ int getIndex(uint2 id, uint _order, bool debug=false) {
           std::cout << "Flipped13: " << currQuad.toString() << std::endl;
       }
 
-      std::cout << nflip02 << std::endl;
-
       if (nflip02) 
         currQuad = flip02(currQuad);
       if (nflip13) 
@@ -142,8 +140,6 @@ int main(int argc, char** argv) {
     x.push_back(hilbert.at(i).x);
     y.push_back(hilbert.at(i).y);
   }
-
-  getIndex(uint2(0, 1), order, true);
 
   plt::plot(x, y);
   plt::show();
